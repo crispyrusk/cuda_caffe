@@ -61,7 +61,12 @@ RUN cd $HOME/caffe && \
     #source activate caffe && \
     for req in `cat python/requirements.txt`; do conda install $req; done
 
+# copy the makefile.config to the caffe folder
 COPY Makefile.config $HOME/caffe/Makefile.config
+
+# add miniconda's lib to LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH $HOME/miniconda2/lib:$LD_LIBRARY_PATH
  
+# change ownership to cudacaffe user
 RUN chown -R cudacaffe:cudacaffe $HOME 
 
