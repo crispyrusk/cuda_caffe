@@ -70,3 +70,4 @@ ENV LD_LIBRARY_PATH $HOME/miniconda2/lib:$LD_LIBRARY_PATH
 # change ownership to cudacaffe user
 RUN chown -R cudacaffe:cudacaffe $HOME 
 
+USER cudacaffe
