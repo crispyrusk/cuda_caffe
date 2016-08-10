@@ -119,6 +119,29 @@ Once you have a stable driver setting on the ec2 instance, you can follow the Do
 
 Jupyter-Notebook is a convenient browser-based development tool for quick prototyping for data applications (http://jupyter.org/). Jupyter-Notebook is packaged with the anaconda python packaged in the docker image built using cuda_caffe. 
 
+To access a the Jupyter-Notebook application running within the container, we must enable port forwarding from the container. You can also mount a folder in this host as volume mount inside the container. Running the notebooks on this mounted folder in the container allows us to save the notebooks even after the container is destroyed. In this example, we will mount the cuda_caffe/nbooks folder from the repo as an example. Any other folder can also be used.
+
+```
+# run the nvidia docker container with port forwading. Forward container's port 9000 to host's port 9000
+# also mount cuda_caffe/nbooks folder to 
+$ nvidia-docker run --rm -ti --net=host -p 9000:9000 -v cuda_caffe/nbooks:/home/cudacaffe/nbooks <image>:<tag> /bin/bash
+
+# inside the container
+
+$ cd $HOME/caffe
+$ make -j8 # build caffe
+$ export LD_LIBRARY_PATH=/home/cudacaffe/miniconda2/lib:$LD_LIBRARY_PATH
+$ jupyter-notebook --no-browser --port=9000 # forward the jupyter-notebook to port 9000
+# the jupyter-notebook kernel should be running
+
+```
+
+In the host, access http::/localhost:9000 on any browser. You should see the jupyter-notebook running. Note that the python kernel runs on the container and the output is rendered in the host browser.
+
+## Profiling speed of GPU containers
+
+Some profiling results of training and inference speeds of the Caffe deep learning framework on the host and GPU containers is documented in the notebooks in the cuda_caffe/nbooks folder. 
+
 
 
 
