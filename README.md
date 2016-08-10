@@ -1,6 +1,6 @@
 #cuda_caffe 
 
-The repo contains a few Dockerfiles to build the Caffe deep learning framework (https://github.com/BVLC/caffe) using NVIDIA's docker tool, nvidia-docker (https://github.com/NVIDIA/nvidia-docker). Nvidia-docker is convenient wrapper over docker (https://www.docker.com/) that simplifies containerizing GPU applications, like deep-learning frameworks. See the "Why NVIDIA Docker" page (https://github.com/NVIDIA/nvidia-docker/wiki/Why%20NVIDIA%20Docker) for the motivation of this tool. The list of base images provided by NVIDIA is documented in https://hub.docker.com/r/nvidia/cuda/
+The repo contains a few Dockerfiles to build the [Caffe deep learning framework](https://github.com/BVLC/caffe) using NVIDIA's docker tool, [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Nvidia-docker is convenient wrapper over [docker](https://www.docker.com/) that simplifies containerizing GPU applications, like deep-learning frameworks. See the ["Why NVIDIA Docker" page](https://github.com/NVIDIA/nvidia-docker/wiki/Why%20NVIDIA%20Docker) for the motivation of this tool. The list of base images provided by NVIDIA is documented in https://hub.docker.com/r/nvidia/cuda/
 
 
 The Dockerfile help setup the dependencies required for Caffe with various options CUDA and cuDNN. It uses Anaconda's distribution of python as default python for Caffe.
@@ -93,7 +93,7 @@ $ make runtest -j8 # all the test should run without errors
 
 AWS provides a couple of GPU instance types, g2.2xlarge and g2.8xlarge. The NVIDIA-Docker provides instructions on how to deploy NVIDIA-Docker based containers on these instances: https://github.com/NVIDIA/nvidia-docker/wiki/Deploy-on-Amazon-EC2
 
-The following instructions works and is tested on the g2.2xlarge instances running Ubuntu 14
+The following instructions is tested on the g2.2xlarge instances running Ubuntu 14
 
 Prepare the instance to expose the GPU:
 ```
@@ -115,15 +115,15 @@ Some issues have been reported with AWS GPU instances with the latest drivers. I
 
 Once you have a stable driver setting on the ec2 instance, you can follow the Docker and NVIDIA-Docker installation from above to install docker, and then clone the cuda_caffe repo.
 
-## Docker options for running Jupyter-Notebook within the container
+## Running jupyter-notebook within the container
 
-Jupyter-Notebook is a convenient browser-based development tool for quick prototyping for data applications (http://jupyter.org/). Jupyter-Notebook is packaged with the anaconda python packaged in the docker image built using cuda_caffe. 
+jupyter-notebook is a convenient browser-based development tool for quick prototyping for data applications (http://jupyter.org/). jupyter-notebook is packaged  anaconda python in the docker image built using cuda_caffe. 
 
-To access a the Jupyter-Notebook application running within the container, we must enable port forwarding from the container. You can also mount a folder in this host as volume mount inside the container. Running the notebooks on this mounted folder in the container allows us to save the notebooks even after the container is destroyed. In this example, we will mount the cuda_caffe/nbooks folder from the repo as an example. Any other folder can also be used.
+To access a the jupyter-notebook application running within the container, we must enable port forwarding from the container. You can also mount a host folder as a volume mount inside the container. Running the notebooks on this mounted folder in the container allows us to save notebooks even after the container is destroyed. In this example, we will mount the cuda_caffe/nbooks host folder from the repo as an example. Any other folder can also be used.
 
 ```
 # run the nvidia docker container with port forwading. Forward container's port 9000 to host's port 9000
-# also mount cuda_caffe/nbooks folder to 
+# also mount cuda_caffe/nbooks folder to a mount point /home/cudacaffe/nbooks
 $ nvidia-docker run --rm -ti --net=host -p 9000:9000 -v cuda_caffe/nbooks:/home/cudacaffe/nbooks <image>:<tag> /bin/bash
 
 # inside the container
@@ -131,16 +131,21 @@ $ nvidia-docker run --rm -ti --net=host -p 9000:9000 -v cuda_caffe/nbooks:/home/
 $ cd $HOME/caffe
 $ make -j8 # build caffe
 $ export LD_LIBRARY_PATH=/home/cudacaffe/miniconda2/lib:$LD_LIBRARY_PATH
+$ make pycaffe # build python layers
+$ make distribute
+$ cd ..
 $ jupyter-notebook --no-browser --port=9000 # forward the jupyter-notebook to port 9000
-# the jupyter-notebook kernel should be running
-
+# the jupyter-notebook kernel should be running within the container
 ```
 
-In the host, access http::/localhost:9000 on any browser. You should see the jupyter-notebook running. Note that the python kernel runs on the container and the output is rendered in the host browser.
+In the host, access [http::/localhost:9000] on any browser. You should see the jupyter-notebook running. Note that the python kernel runs on the container and the output is rendered in the host browser.
+
+A similar setup works a jupyter-notebook running in a container within a AWS ec2 instance. With suitable port-forwarding you can rended the jupyter-notebook on your local browser. 
 
 ## Profiling speed of GPU containers
 
-Some profiling results of training and inference speeds of the Caffe deep learning framework on the host and GPU containers is documented in the notebooks in the cuda_caffe/nbooks folder. 
+Some profiling results of training and inference speeds of the Caffe deep learning framework on the host and GPU containers is documented in the notebooks in the cuda_caffe/nbooks folder: https://github.com/crispyrusk/cuda_caffe/tree/master/nbooks
+
 
 
 
