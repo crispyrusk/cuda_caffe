@@ -111,9 +111,13 @@ sudo sh ~/sw/NVIDIA-Linux-x86_64-361.42.run --silent
 sudo apt-get install nvidia-modprobe
 ```
 
-Some issues have been reported with AWS GPU instances with the latest drivers. In such cases, it is recommeded to install drivers that are stable with CUDA 7.0. Alternatively, you can also use a prebuilt AMI with a stable driver and CUDA installation, such as ami-763a311e[https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-763a311e] (https://github.com/BVLC/caffe/wiki/Caffe-on-EC2-Ubuntu-14.04-Cuda-7). 
+Some issues have been reported with AWS GPU instances with the latest drivers. In such cases, it is recommeded to install drivers that are stable with CUDA 7.0. Alternatively, you can also use a prebuilt AMI with a stable driver and CUDA installation, such as [ami-763a311e](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-763a311e) (https://github.com/BVLC/caffe/wiki/Caffe-on-EC2-Ubuntu-14.04-Cuda-7). 
 
 Once you have a stable driver setting on the ec2 instance, you can follow the Docker and NVIDIA-Docker installation from above to install docker, and then clone the cuda_caffe repo.
+
+## Docker options for running Jupyter-Notebook within the container
+
+Jupyter-Notebook is a convenient browser-based development tool for quick prototyping for data applications (http://jupyter.org/). Jupyter-Notebook is packaged with the anaconda python packaged in the docker image built using cuda_caffe. 
 
 
 
